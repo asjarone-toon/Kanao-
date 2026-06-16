@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>หอเล่าเรื่อง — การ์ตูนผีไทย</title>
+
+<!--
+═══════════════════════════════════════════════════════════════════════
+  วิธีเพิ่มเรื่องใหม่ (ไม่ต้องแตะโค้ดส่วนอื่นเลย)
+  ─────────────────────────────────────────────────────────────────────
+  1) อัปโหลดภาพการ์ตูนขึ้น GitHub repo ของคุณ
+  2) เปิดไฟล์เป็น "raw" แล้วก๊อป URL  เช่น
+     https://raw.githubusercontent.com/USERNAME/REPO/main/story1/01.png
+  3) มาเพิ่มก้อนข้อมูลใน  STORIES  ด้านล่างนี้ ตามรูปแบบที่เห็น
+  4) เซฟ → รีเฟรช  เรื่องใหม่ขึ้นเองอัตโนมัติ
+
+  เคล็ดลับ: ตั้งชื่อไฟล์ภาพเป็น 01.png 02.png 03.png ... เรียงเลข
+  จะได้ก๊อป URL ง่าย และลำดับหน้าไม่สลับ
+═══════════════════════════════════════════════════════════════════════
+-->
+
+<script>
+// ╔═══════════════════════════════════════════════════════════════════╗
+// ║  แก้ตรงนี้ที่เดียว — ข้อมูลเรื่องทั้งหมด                              ║
+// ╚═══════════════════════════════════════════════════════════════════╝
+
+// (ถ้ายังไม่อัปภาพขึ้น GitHub ปล่อย BASE ว่างไว้ก่อน แอปจะโชว์ช่องตัวอย่างให้)
+const GITHUB_BASE = "https://raw.githubusercontent.com/asjarone-toon/Kanao-/main/";
+
+const STORIES = [
+  {
+    id: "khaonao",
+    title: "ช่วยข้าด้วย หนาวเหลือเกิน",
+    subtitle: "เรื่องเล่าจากชุมชนริมน้ำ เมื่อ ๕๐ ปีก่อน",
+    cover: "01.jpg",
+    pages: [
+      "01.jpg",
+      "02.jpg",
+      "03.jpg",
+      "04.jpg",
+      "05.jpg",
+      "06.jpg",
+      "07.jpg",
+      "08.jpg",
+      "09.jpg",
+      "10.jpg",
+      "11.jpg",
+      "12.jpg",
+      "13.jpg",
+      "14.jpg",
+      "15.jpg",
+      "16.jpg",
+      "17.jpg",
+      "18.jpg",
+      "19.jpg",
+      "20.jpg",
+      "21.jpg"
+    ],
+    buyUrl: ""
+  },
+  {
+    id: "longkaew",
+    title: "ปราสาทร้าง วิญญาณหลอนในโลงแก้ว",
+    subtitle: "เมื่อความโลภปลุกวิญญาณที่หลับใหล",
+    cover: "lk00.jpg",
+    pages: [
+      "lk00.jpg",
+      "lk01.jpg",
+      "lk02.jpg",
+      "lk03.jpg",
+      "lk04.jpg",
+      "lk05.jpg",
+      "lk06.jpg",
+      "lk07.jpg",
+      "lk08.jpg",
+      "lk09.jpg",
+      "lk10.jpg",
+      "lk11.jpg",
+      "lk12.jpg",
+      "lk13.jpg",
+      "lk14.jpg",
+      "lk15.jpg",
+      "lk16.jpg",
+      "lk17.jpg",
+      "lk18.jpg",
+      "lk19.jpg"
+    ],
+    buyUrl: ""
+  }
+];
+
+// เพลงประกอบ (เพลงเดียววนทั้งแอป) — ใส่ URL ไฟล์ .mp3 จาก GitHub หรือที่อื่น
+// ปล่อยว่างไว้ได้ ถ้ายังไม่มีเพลง ปุ่มเสียงจะซ่อนเอง
+// เพลงประกอบ — เพิ่มเพลงใหม่ได้เรื่อยๆ แค่เพิ่มบรรทัดในลิสต์นี้
+// file = ชื่อไฟล์ใน repo, name = ชื่อโชว์, color = สีปุ่ม
+const TRACKS = [
+  { file: "bgm.mp3",  name: "เงาในศาลา", color: "#d8b06a" },  // ทอง
+  { file: "bgm2.mp3", name: "เงาศาลา",   color: "#7fa8d8" },  // ฟ้าหม่น
+  { file: "bgm3.mp3", name: "ศาลาเงาไม้ไผ่", color: "#b78fd8" },  // ม่วง
+];
+
+// ╔═══════════════════════════════════════════════════════════════════╗
+// ║  ใต้บรรทัดนี้คือระบบแอป ปกติไม่ต้องแก้                                ║
+// ╚═══════════════════════════════════════════════════════════════════╝
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chonburi&family=Charmonman:wght@400;700&family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --ink:#0c1119;          /* น้ำเงินหมึกค่ำคืน */
+  --ink-2:#131c2b;
+  --ink-soft:#1a2536;
+  --lamp:#d8b06a;         /* ทองแสงตะเกียง */
+  --lamp-bright:#f0d49a;
+  --blood:#a8392b;        /* แดงชาด */
+  --paper:#e9e1cf;        /* สีกระดาษเก่า */
+  --paper-dim:#b9b09a;
+  --shadow:rgba(0,0,0,.55);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;}
+body{
+  background:
+    radial-gradient(140% 90% at 50% -10%, #16213a 0%, var(--ink) 55%, #070b12 100%);
+  color:var(--paper);
+  font-family:'Sarabun',system-ui,sans-serif;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── ตะเกียงกระพริบเป็นบรรยากาศพื้นหลัง ── */
+.embers{position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;}
+.ember{position:absolute;width:3px;height:3px;border-radius:50%;
+  background:var(--lamp-bright);filter:blur(1px);
+  animation:rise linear infinite;}
+@keyframes rise{
+  0%{transform:translateY(0) scale(1);opacity:0;}
+  10%{opacity:.9;}
+  90%{opacity:.4;}
+  100%{transform:translateY(-110vh) scale(.3);opacity:0;}
+}
+
+/* ── โครงหลัก ── */
+#app{position:relative;z-index:1;max-width:720px;margin:0 auto;min-height:100%;}
+
+/* ── หน้าแรก: ชั้นวางหนังสือ ── */
+.home{padding:clamp(28px,7vw,56px) clamp(18px,5vw,32px) 80px;}
+.brand{text-align:center;margin-bottom:clamp(28px,7vw,48px);}
+.brand .lantern{font-size:34px;line-height:1;filter:drop-shadow(0 0 14px var(--lamp));}
+.brand h1{
+  font-family:'Chonburi',serif;font-weight:400;
+  font-size:clamp(34px,9vw,52px);
+  color:var(--lamp-bright);
+  letter-spacing:.5px;margin-top:8px;
+  text-shadow:0 2px 18px rgba(216,176,106,.35),0 1px 0 #000;
+}
+.brand p{color:var(--paper-dim);margin-top:10px;font-size:15px;letter-spacing:2px;}
+.brand .rule{width:62px;height:2px;margin:18px auto 0;
+  background:linear-gradient(90deg,transparent,var(--lamp),transparent);}
+
+.shelf-label{display:flex;align-items:center;gap:12px;margin:0 4px 18px;
+  color:var(--lamp);font-size:13px;letter-spacing:3px;text-transform:uppercase;}
+.shelf-label::after{content:"";flex:1;height:1px;
+  background:linear-gradient(90deg,rgba(216,176,106,.5),transparent);}
+
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(14px,4vw,22px);}
+@media(min-width:560px){.grid{grid-template-columns:repeat(3,1fr);}}
+
+.book{position:relative;cursor:pointer;border:none;background:none;
+  padding:0;text-align:left;color:inherit;font:inherit;
+  transition:transform .35s cubic-bezier(.2,.8,.2,1);}
+.book:active{transform:scale(.97);}
+.book:hover .cover{transform:translateY(-6px) rotateY(-4deg);
+  box-shadow:-10px 14px 34px var(--shadow),0 0 0 1px rgba(216,176,106,.4);}
+.cover{position:relative;aspect-ratio:3/4.4;border-radius:5px 8px 8px 5px;
+  overflow:hidden;background:var(--ink-soft);
+  box-shadow:-6px 8px 22px var(--shadow),0 0 0 1px rgba(216,176,106,.18);
+  transition:transform .4s cubic-bezier(.2,.8,.2,1),box-shadow .4s;
+  transform-style:preserve-3d;}
+.cover::before{content:"";position:absolute;left:0;top:0;bottom:0;width:9px;
+  background:linear-gradient(90deg,rgba(0,0,0,.55),rgba(255,255,255,.06) 60%,rgba(0,0,0,.3));
+  z-index:2;}
+.cover img{width:100%;height:100%;object-fit:cover;display:block;}
+.book h3{font-family:'Chonburi',serif;font-weight:400;font-size:15px;
+  margin-top:12px;color:var(--paper);line-height:1.4;}
+.book .pagecount{color:var(--lamp);font-size:12px;margin-top:3px;letter-spacing:.5px;}
+
+/* ช่อง placeholder เวลายังไม่มีภาพ */
+.ph{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  height:100%;padding:14px;text-align:center;gap:8px;
+  background:repeating-linear-gradient(45deg,#16203220,#16203220 8px,#1a263a20 8px,#1a263a20 16px);}
+.ph .ico{font-size:26px;opacity:.6;}
+.ph small{color:var(--paper-dim);font-size:11px;line-height:1.5;}
+
+/* ── โหมดอ่าน ── */
+.reader{position:fixed;inset:0;z-index:50;background:#06090f;
+  display:none;flex-direction:column;}
+.reader.open{display:flex;animation:fadeIn .35s ease;}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+
+.r-top{position:absolute;top:0;left:0;right:0;z-index:10;
+  display:flex;align-items:center;gap:12px;
+  padding:calc(env(safe-area-inset-top,0) + 12px) 16px 12px;
+  background:linear-gradient(180deg,rgba(6,9,15,.92),transparent);
+  transition:opacity .3s,transform .3s;}
+.r-top.hide{opacity:0;transform:translateY(-100%);pointer-events:none;}
+.iconbtn{width:40px;height:40px;flex:none;border:none;border-radius:50%;
+  background:rgba(216,176,106,.12);color:var(--lamp-bright);font-size:18px;
+  cursor:pointer;display:grid;place-items:center;
+  transition:background .2s;}
+.iconbtn:active{background:rgba(216,176,106,.28);}
+.r-title{flex:1;min-width:0;font-family:'Chonburi',serif;font-size:16px;
+  color:var(--paper);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+.stage{flex:1;overflow-y:auto;overflow-x:hidden;scroll-behavior:smooth;
+  scroll-snap-type:y mandatory;}
+.stage::-webkit-scrollbar{width:0;}
+.page{scroll-snap-align:center;min-height:100%;display:flex;
+  align-items:center;justify-content:center;padding:0;position:relative;}
+.page img{width:100%;height:auto;display:block;}
+.page .loading{position:absolute;color:var(--paper-dim);font-size:14px;
+  display:flex;flex-direction:column;align-items:center;gap:10px;}
+.spinner{width:26px;height:26px;border:2px solid rgba(216,176,106,.25);
+  border-top-color:var(--lamp);border-radius:50%;animation:spin 1s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* แถบความคืบหน้า + เลขหน้า ล่างจอ */
+.r-bottom{position:absolute;bottom:0;left:0;right:0;z-index:10;
+  padding:14px 18px calc(env(safe-area-inset-bottom,0) + 16px);
+  background:linear-gradient(0deg,rgba(6,9,15,.92),transparent);
+  transition:opacity .3s,transform .3s;}
+.r-bottom.hide{opacity:0;transform:translateY(100%);pointer-events:none;}
+.progress{height:3px;border-radius:3px;background:rgba(255,255,255,.12);overflow:hidden;}
+.progress i{display:block;height:100%;width:0;background:var(--lamp);
+  box-shadow:0 0 8px var(--lamp);transition:width .3s;}
+.pageno{text-align:center;color:var(--lamp);font-size:13px;margin-top:8px;
+  letter-spacing:1px;}
+
+/* หน้าจบเรื่อง */
+.endcard{min-height:100%;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:18px;padding:40px 28px;
+  text-align:center;scroll-snap-align:center;}
+.endcard .seal{font-size:40px;filter:drop-shadow(0 0 16px var(--lamp));}
+.endcard h2{font-family:'Chonburi',serif;font-size:26px;color:var(--lamp-bright);}
+.endcard p{color:var(--paper-dim);max-width:300px;line-height:1.7;}
+.buybtn{margin-top:6px;padding:14px 30px;border:none;border-radius:40px;
+  background:linear-gradient(135deg,var(--blood),#7d2118);color:#fff;
+  font-family:'Sarabun';font-weight:600;font-size:16px;cursor:pointer;
+  box-shadow:0 6px 22px rgba(168,57,43,.45);transition:transform .2s;}
+.buybtn:active{transform:scale(.96);}
+.backbtn{background:none;border:1px solid rgba(216,176,106,.4);
+  color:var(--lamp);padding:11px 26px;border-radius:40px;cursor:pointer;
+  font-family:'Sarabun';font-size:15px;}
+
+/* แถบปุ่มเพลง ลอยมุมขวาล่าง (รองรับหลายปุ่ม) */
+.music-dock{position:fixed;z-index:60;right:16px;
+  bottom:calc(env(safe-area-inset-bottom,0) + 16px);
+  display:none;flex-direction:column;gap:10px;align-items:flex-end;}
+.music-dock.show{display:flex;}
+.track-btn{width:48px;height:48px;border:none;border-radius:50%;
+  background:rgba(20,28,44,.92);font-size:20px;cursor:pointer;
+  display:grid;place-items:center;position:relative;
+  color:var(--clr, #d8b06a);
+  box-shadow:0 4px 16px var(--shadow),0 0 0 1px var(--clr, #d8b06a);
+  transition:transform .2s,box-shadow .3s;}
+.track-btn:active{transform:scale(.92);}
+.track-btn.playing{animation:pulseClr 2s ease-in-out infinite;
+  background:var(--clr);color:#0c1119;}
+@keyframes pulseClr{0%,100%{box-shadow:0 4px 16px var(--shadow),0 0 0 1px var(--clr);}
+  50%{box-shadow:0 4px 24px var(--clr),0 0 0 2px var(--clr);}}
+/* ป้ายชื่อเพลงโผล่ตอนเล่น */
+.track-btn .label{position:absolute;right:58px;top:50%;transform:translateY(-50%);
+  white-space:nowrap;background:rgba(20,28,44,.95);color:var(--clr);
+  font-family:'Sarabun';font-size:13px;padding:5px 12px;border-radius:20px;
+  box-shadow:0 0 0 1px var(--clr);opacity:0;pointer-events:none;transition:opacity .3s;}
+.track-btn.playing .label{opacity:1;}
+@keyframes pulse{0%,100%{box-shadow:0 4px 16px var(--shadow),0 0 0 1px rgba(216,176,106,.3);}
+  50%{box-shadow:0 4px 22px rgba(216,176,106,.5),0 0 0 1px rgba(216,176,106,.6);}}
+
+/* เคารพผู้ที่ตั้งค่าลดการเคลื่อนไหว */
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.001ms!important;animation-iteration-count:1!important;}
+  .stage{scroll-behavior:auto;}
+}
+</style>
+</head>
+<body>
+
+<div class="embers" id="embers"></div>
+
+<div id="app">
+  <!-- หน้าแรกถูกสร้างด้วย JS -->
+</div>
+
+<!-- โหมดอ่าน -->
+<div class="reader" id="reader">
+  <div class="r-top" id="rTop">
+    <button class="iconbtn" id="btnBack" aria-label="กลับ">‹</button>
+    <div class="r-title" id="rTitle"></div>
+  </div>
+  <div class="stage" id="stage"></div>
+  <div class="r-bottom" id="rBottom">
+    <div class="progress"><i id="progBar"></i></div>
+    <div class="pageno" id="pageNo"></div>
+  </div>
+</div>
+
+<div class="music-dock" id="musicDock"></div>
+<audio id="audio" loop preload="none"></audio>
+
+<script>
+const $ = s => document.querySelector(s);
+const thaiNum = n => String(n).replace(/\d/g, d => "๐๑๒๓๔๕๖๗๘๙"[d]);
+
+/* ── ระบบโหลดภาพแบบมีตัวสำรอง (CDN fallback) ──
+   เน็ตบางเครือข่ายในไทยเข้า raw.githubusercontent.com ไม่ได้
+   จึงลองหลายแหล่งเรียงกัน ถ้าตัวแรกพลาดจะสลับตัวถัดไปเอง  */
+function ghParts(){
+  // แกะ user/repo/branch จาก GITHUB_BASE (รองรับทั้ง raw และ cdn jsdelivr)
+  let m = GITHUB_BASE.match(/raw\.githubusercontent\.com\/([^/]+)\/([^/]+)\/([^/]+)\//);
+  if(m) return {user:m[1], repo:m[2], branch:m[3]};
+  m = GITHUB_BASE.match(/jsdelivr\.net\/gh\/([^/]+)\/([^@/]+)@([^/]+)\//);
+  if(m) return {user:m[1], repo:m[2], branch:m[3]};
+  return null;
+}
+const GH = ghParts();
+function sources(path){
+  // คืนลิสต์ URL เรียงตามลำดับที่จะลอง
+  if(!GH) return [(GITHUB_BASE||"") + path];
+  const {user,repo,branch} = GH;
+  return [
+    `https://cdn.jsdelivr.net/gh/${user}/${repo}@${branch}/${path}`,   // CDN หลัก เข้าได้จากเน็ตไทย เร็ว
+    `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${path}`, // สำรอง 1
+    `https://cdn.statically.io/gh/${user}/${repo}/${branch}/${path}`,  // สำรอง 2
+  ];
+}
+// โหลดภาพโดยไล่ลองทีละแหล่ง  onOK(imgEl) เมื่อสำเร็จ  onFail() เมื่อหมดทุกแหล่ง
+// ใช้ <img> ที่ผูกกับ DOM (ไม่ใช่ new Image() ลอยๆ) เพื่อเลี่ยงปัญหา CORS เวลาเปิดไฟล์แบบ file://
+function loadImage(path, alt, onOK, onFail){
+  const srcs = sources(path);
+  const img = document.createElement("img");
+  img.alt = alt || "";
+  img.decoding = "async";
+  let i = 0;
+  img.addEventListener("load", () => {
+    console.log("[หอเล่าเรื่อง] โหลดสำเร็จ:", img.getAttribute("src"));
+    onOK(img);
+  });
+  img.addEventListener("error", () => {
+    console.warn("[หอเล่าเรื่อง] โหลดไม่ได้:", img.getAttribute("src"));
+    i++;
+    if(i < srcs.length){ img.setAttribute("src", srcs[i]); }
+    else { console.error("[หอเล่าเรื่อง] หมดทุกแหล่งแล้ว:", path); onFail && onFail(); }
+  });
+  img.setAttribute("referrerpolicy", "no-referrer");
+  img.setAttribute("src", srcs[0]);
+  return img;
+}
+const url = p => sources(p)[0]; // ใช้ตอนแสดงตัวอย่าง/ลิงก์เฉยๆ
+
+/* ── สร้างเศษไฟกระพริบ ── */
+(function(){
+  const box = $("#embers");
+  for(let i=0;i<14;i++){
+    const e=document.createElement("div");
+    e.className="ember";
+    e.style.left=Math.random()*100+"%";
+    e.style.bottom=(-5-Math.random()*20)+"%";
+    const dur=9+Math.random()*10;
+    e.style.animationDuration=dur+"s";
+    e.style.animationDelay=(-Math.random()*dur)+"s";
+    e.style.opacity=.3+Math.random()*.5;
+    box.appendChild(e);
+  }
+})();
+
+/* ── หน้าแรก: ชั้นวางหนังสือ ── */
+function renderHome(){
+  const app = $("#app");
+  app.innerHTML = `
+    <div class="home">
+      <div class="brand">
+        <div class="lantern">🏮</div>
+        <h1>หอเล่าเรื่อง</h1>
+        <p>การ์ตูนผีไทย</p>
+        <div class="rule"></div>
+      </div>
+      <div class="shelf-label">เลือกเรื่องที่อยากอ่าน</div>
+      <div class="grid" id="grid"></div>
+    </div>`;
+  const grid = $("#grid");
+  STORIES.forEach((s, i) => {
+    const b = document.createElement("button");
+    b.className = "book";
+    b.onclick = () => openReader(i);
+    const coverBox = document.createElement("div");
+    coverBox.className = "cover";
+    if(GITHUB_BASE && s.cover){
+      coverBox.innerHTML = `<div class="ph"><div class="spinner"></div></div>`;
+      loadImage(s.cover, s.title,
+        (img)=>{ coverBox.innerHTML=""; coverBox.appendChild(img); },
+        ()=>{ coverBox.innerHTML = `<div class="ph"><div class="ico">🖼️</div>
+              <small>โหลดปกไม่ได้<br>เช็กว่าอัปภาพ<br>ขึ้น repo แล้ว</small></div>`; });
+    } else {
+      coverBox.innerHTML = `<div class="ph"><div class="ico">🖼️</div><small>ยังไม่ได้ตั้ง<br>GITHUB_BASE</small></div>`;
+    }
+    b.innerHTML = `<h3>${s.title}</h3>
+      <div class="pagecount">${thaiNum(s.pages.length)} หน้า</div>`;
+    b.insertBefore(coverBox, b.firstChild);
+    grid.appendChild(b);
+  });
+}
+
+/* ── โหมดอ่าน ── */
+let current = -1;
+function openReader(i){
+  current = i;
+  const s = STORIES[i];
+  $("#rTitle").textContent = s.title;
+  const stage = $("#stage");
+  stage.innerHTML = "";
+
+  s.pages.forEach((p, idx) => {
+    const pg = document.createElement("div");
+    pg.className = "page";
+    pg.innerHTML = `<div class="loading"><div class="spinner"></div>
+        <span>กำลังเปิดหน้า ${thaiNum(idx+1)}</span></div>`;
+    if(GITHUB_BASE){
+      loadImage(p, `${s.title} หน้า ${idx+1}`,
+        (img)=>{ pg.innerHTML=""; pg.appendChild(img); },
+        ()=>{ pg.innerHTML = `<div class="ph" style="aspect-ratio:auto;min-height:60vh">
+          <div class="ico">⚠️</div>
+          <small>โหลดภาพหน้านี้ไม่ได้<br>(${p})<br><br>เช็กว่าอัปขึ้น repo<br>และต่อเน็ตอยู่</small></div>`; });
+    } else {
+      pg.innerHTML = `<div class="ph" style="aspect-ratio:auto;min-height:60vh">
+        <div class="ico">🖼️</div>
+        <small>หน้า ${thaiNum(idx+1)}<br>(ตั้งค่า GITHUB_BASE ก่อน)</small></div>`;
+    }
+    stage.appendChild(pg);
+  });
+
+  // หน้าจบเรื่อง
+  const end = document.createElement("div");
+  end.className = "endcard";
+  end.innerHTML = `
+    <div class="seal">🔚</div>
+    <h2>จบเรื่อง</h2>
+    <p>ขอบคุณที่ติดตามจนจบนะครับ<br>ถ้าชอบเรื่องนี้ อ่านฉบับเต็มความคมชัดสูงได้</p>
+    ${s.buyUrl ? `<button class="buybtn" onclick="window.open('${s.buyUrl}','_blank')">หาซื้อฉบับเต็ม</button>` : ``}
+    <button class="backbtn" id="endBack">‹ กลับไปเลือกเรื่องอื่น</button>`;
+  stage.appendChild(end);
+
+  $("#reader").classList.add("open");
+  document.body.style.overflow = "hidden";
+  stage.scrollTop = 0;
+  updateProgress();
+  $("#endBack").onclick = closeReader;
+
+  // เริ่มเพลงถ้ามีและผู้ใช้เคยเปิดไว้
+  maybeStartMusic();
+}
+
+function closeReader(){
+  $("#reader").classList.remove("open");
+  document.body.style.overflow = "";
+  current = -1;
+}
+$("#btnBack").onclick = closeReader;
+
+/* ── progress + เลขหน้า ── */
+const stage = $("#stage");
+function updateProgress(){
+  if(current < 0) return;
+  const total = STORIES[current].pages.length;
+  const pages = [...stage.querySelectorAll(".page")];
+  const mid = stage.scrollTop + stage.clientHeight/2;
+  let idx = 0;
+  pages.forEach((pg,i)=>{ if(pg.offsetTop <= mid) idx = i; });
+  const cur = Math.min(idx+1, total);
+  $("#pageNo").textContent = `${thaiNum(cur)} / ${thaiNum(total)}`;
+  const ratio = stage.scrollHeight > stage.clientHeight
+    ? stage.scrollTop / (stage.scrollHeight - stage.clientHeight) : 0;
+  $("#progBar").style.width = (ratio*100)+"%";
+}
+let scrollTick;
+stage.addEventListener("scroll", ()=>{
+  cancelAnimationFrame(scrollTick);
+  scrollTick = requestAnimationFrame(updateProgress);
+  showChrome();
+});
+
+/* ── แตะกลางจอเพื่อซ่อน/โชว์แถบเครื่องมือ ── */
+let chromeTimer;
+function showChrome(){
+  $("#rTop").classList.remove("hide");
+  $("#rBottom").classList.remove("hide");
+  clearTimeout(chromeTimer);
+  chromeTimer = setTimeout(()=>{
+    $("#rTop").classList.add("hide");
+    $("#rBottom").classList.add("hide");
+  }, 2600);
+}
+stage.addEventListener("click", e=>{
+  // แตะกลางจอ = สลับแถบ (ไม่รบกวนปุ่มอื่น)
+  const t = $("#rTop");
+  if(t.classList.contains("hide")) showChrome();
+  else { t.classList.add("hide"); $("#rBottom").classList.add("hide"); }
+});
+
+/* ── เพลงประกอบ (เลือกได้หลายเพลง) ── */
+const audio = $("#audio");
+const dock = $("#musicDock");
+let currentTrack = -1;  // -1 = ไม่มีเพลงเล่นอยู่
+
+if(TRACKS && TRACKS.length){
+  dock.classList.add("show");
+  TRACKS.forEach((t, i) => {
+    const btn = document.createElement("button");
+    btn.className = "track-btn";
+    btn.style.setProperty("--clr", t.color);
+    btn.setAttribute("aria-label", "เล่นเพลง " + t.name);
+    btn.innerHTML = `<span class="label">${t.name}</span>♪`;
+    btn.onclick = () => toggleTrack(i, btn);
+    dock.appendChild(btn);
+  });
+}
+
+function allButtons(){ return [...dock.querySelectorAll(".track-btn")]; }
+
+function toggleTrack(i, btn){
+  if(currentTrack === i){
+    // กดปุ่มเพลงที่เล่นอยู่ = หยุด
+    audio.pause();
+    btn.classList.remove("playing");
+    currentTrack = -1;
+  } else {
+    // สลับไปเพลงใหม่
+    allButtons().forEach(b => b.classList.remove("playing"));
+    audio.src = TRACKS[i].file;
+    audio.play().then(()=>{
+      btn.classList.add("playing");
+      currentTrack = i;
+    }).catch(()=>{ currentTrack = -1; });
+  }
+}
+
+// เรียกตอนเปิดอ่าน — เพลงที่เล่นอยู่เล่นต่อเอง (ไม่ต้องทำอะไรเพิ่ม เพราะ audio เล่นต่อข้ามหน้าอยู่แล้ว)
+function maybeStartMusic(){ /* เพลงเล่นต่อเนื่องอยู่แล้ว */ }
+
+/* ── ปุ่มย้อนกลับของมือถือ = ปิดโหมดอ่านก่อน ── */
+window.addEventListener("popstate", ()=>{ if(current>=0) closeReader(); });
+
+renderHome();
+</script>
+</body>
+</html>
