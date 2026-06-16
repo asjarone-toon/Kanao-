@@ -57,27 +57,48 @@ const STORIES = [
       "20.jpg",
       "21.jpg"
     ],
-    buyUrl: ""   // ใส่ลิงก์ขายเล่มเต็ม (Meb/Gumroad) ทีหลังได้
-  }
-  /* ─────────────────────────────────────────────────────────────
-     อยากเพิ่มเรื่องที่ 2 (longkaew): อัปภาพขึ้น repo ก่อน
-     ถ้าใส่ไว้ในโฟลเดอร์ longkaew/ ให้ path เป็น "longkaew/01.jpg"
-     ถ้าใส่ root เหมือน khaonao ต้องเปลี่ยนชื่อกันชนกัน เช่น lk01.jpg
-     แล้วก๊อปก้อนข้างบนมาวางตรงนี้:
-  ,{
+    buyUrl: ""
+  },
+  {
     id: "longkaew",
     title: "ปราสาทร้าง วิญญาณหลอนในโลงแก้ว",
     subtitle: "เมื่อความโลภปลุกวิญญาณที่หลับใหล",
-    cover: "longkaew/01.jpg",
-    pages: ["longkaew/01.jpg","longkaew/02.jpg"  ...เพิ่มจนครบ ],
+    cover: "lk00.jpg",
+    pages: [
+      "lk00.jpg",
+      "lk01.jpg",
+      "lk02.jpg",
+      "lk03.jpg",
+      "lk04.jpg",
+      "lk05.jpg",
+      "lk06.jpg",
+      "lk07.jpg",
+      "lk08.jpg",
+      "lk09.jpg",
+      "lk10.jpg",
+      "lk11.jpg",
+      "lk12.jpg",
+      "lk13.jpg",
+      "lk14.jpg",
+      "lk15.jpg",
+      "lk16.jpg",
+      "lk17.jpg",
+      "lk18.jpg",
+      "lk19.jpg"
+    ],
     buyUrl: ""
   }
-     ───────────────────────────────────────────────────────────── */
 ];
 
 // เพลงประกอบ (เพลงเดียววนทั้งแอป) — ใส่ URL ไฟล์ .mp3 จาก GitHub หรือที่อื่น
 // ปล่อยว่างไว้ได้ ถ้ายังไม่มีเพลง ปุ่มเสียงจะซ่อนเอง
-const MUSIC_URL = "bgm.mp3"; // เพลง "เงาในศาลา" วนทั้งแอป (ไฟล์อยู่ root เดียวกับ index.html)
+// เพลงประกอบ — เพิ่มเพลงใหม่ได้เรื่อยๆ แค่เพิ่มบรรทัดในลิสต์นี้
+// file = ชื่อไฟล์ใน repo, name = ชื่อโชว์, color = สีปุ่ม
+const TRACKS = [
+  { file: "bgm.mp3",  name: "เงาในศาลา", color: "#d8b06a" },  // ทอง
+  { file: "bgm2.mp3", name: "เงาศาลา",   color: "#7fa8d8" },  // ฟ้าหม่น
+  { file: "bgm3.mp3", name: "ศาลาเงาไม้ไผ่", color: "#b78fd8" },  // ม่วง
+];
 
 // ╔═══════════════════════════════════════════════════════════════════╗
 // ║  ใต้บรรทัดนี้คือระบบแอป ปกติไม่ต้องแก้                                ║
@@ -235,15 +256,28 @@ body{
   color:var(--lamp);padding:11px 26px;border-radius:40px;cursor:pointer;
   font-family:'Sarabun';font-size:15px;}
 
-/* ปุ่มเสียง ลอยมุมขวาล่าง */
-.sound{position:fixed;z-index:60;right:16px;
+/* แถบปุ่มเพลง ลอยมุมขวาล่าง (รองรับหลายปุ่ม) */
+.music-dock{position:fixed;z-index:60;right:16px;
   bottom:calc(env(safe-area-inset-bottom,0) + 16px);
-  width:48px;height:48px;border:none;border-radius:50%;
-  background:rgba(20,28,44,.9);color:var(--lamp-bright);font-size:20px;
-  cursor:pointer;display:none;place-items:center;
-  box-shadow:0 4px 16px var(--shadow),0 0 0 1px rgba(216,176,106,.3);}
-.sound.show{display:grid;}
-.sound.playing{animation:pulse 2s ease-in-out infinite;}
+  display:none;flex-direction:column;gap:10px;align-items:flex-end;}
+.music-dock.show{display:flex;}
+.track-btn{width:48px;height:48px;border:none;border-radius:50%;
+  background:rgba(20,28,44,.92);font-size:20px;cursor:pointer;
+  display:grid;place-items:center;position:relative;
+  color:var(--clr, #d8b06a);
+  box-shadow:0 4px 16px var(--shadow),0 0 0 1px var(--clr, #d8b06a);
+  transition:transform .2s,box-shadow .3s;}
+.track-btn:active{transform:scale(.92);}
+.track-btn.playing{animation:pulseClr 2s ease-in-out infinite;
+  background:var(--clr);color:#0c1119;}
+@keyframes pulseClr{0%,100%{box-shadow:0 4px 16px var(--shadow),0 0 0 1px var(--clr);}
+  50%{box-shadow:0 4px 24px var(--clr),0 0 0 2px var(--clr);}}
+/* ป้ายชื่อเพลงโผล่ตอนเล่น */
+.track-btn .label{position:absolute;right:58px;top:50%;transform:translateY(-50%);
+  white-space:nowrap;background:rgba(20,28,44,.95);color:var(--clr);
+  font-family:'Sarabun';font-size:13px;padding:5px 12px;border-radius:20px;
+  box-shadow:0 0 0 1px var(--clr);opacity:0;pointer-events:none;transition:opacity .3s;}
+.track-btn.playing .label{opacity:1;}
 @keyframes pulse{0%,100%{box-shadow:0 4px 16px var(--shadow),0 0 0 1px rgba(216,176,106,.3);}
   50%{box-shadow:0 4px 22px rgba(216,176,106,.5),0 0 0 1px rgba(216,176,106,.6);}}
 
@@ -275,7 +309,7 @@ body{
   </div>
 </div>
 
-<button class="sound" id="btnSound" aria-label="เปิด/ปิดเสียงเพลง">♪</button>
+<div class="music-dock" id="musicDock"></div>
 <audio id="audio" loop preload="none"></audio>
 
 <script>
@@ -477,31 +511,45 @@ stage.addEventListener("click", e=>{
   else { t.classList.add("hide"); $("#rBottom").classList.add("hide"); }
 });
 
-/* ── เพลงประกอบ (เพลงเดียววนทั้งแอป) ── */
+/* ── เพลงประกอบ (เลือกได้หลายเพลง) ── */
 const audio = $("#audio");
-const btnSound = $("#btnSound");
-let musicOn = false;
-if(MUSIC_URL){
-  audio.src = MUSIC_URL;
-  btnSound.classList.add("show");
+const dock = $("#musicDock");
+let currentTrack = -1;  // -1 = ไม่มีเพลงเล่นอยู่
+
+if(TRACKS && TRACKS.length){
+  dock.classList.add("show");
+  TRACKS.forEach((t, i) => {
+    const btn = document.createElement("button");
+    btn.className = "track-btn";
+    btn.style.setProperty("--clr", t.color);
+    btn.setAttribute("aria-label", "เล่นเพลง " + t.name);
+    btn.innerHTML = `<span class="label">${t.name}</span>♪`;
+    btn.onclick = () => toggleTrack(i, btn);
+    dock.appendChild(btn);
+  });
 }
-function maybeStartMusic(){
-  if(MUSIC_URL && musicOn && audio.paused){ audio.play().catch(()=>{}); }
-}
-btnSound.onclick = ()=>{
-  if(!MUSIC_URL) return;
-  musicOn = !musicOn;
-  if(musicOn){
-    audio.play().then(()=>{
-      btnSound.classList.add("playing");
-      btnSound.textContent = "♪";
-    }).catch(()=>{ musicOn=false; });
-  } else {
+
+function allButtons(){ return [...dock.querySelectorAll(".track-btn")]; }
+
+function toggleTrack(i, btn){
+  if(currentTrack === i){
+    // กดปุ่มเพลงที่เล่นอยู่ = หยุด
     audio.pause();
-    btnSound.classList.remove("playing");
-    btnSound.textContent = "♪̶";
+    btn.classList.remove("playing");
+    currentTrack = -1;
+  } else {
+    // สลับไปเพลงใหม่
+    allButtons().forEach(b => b.classList.remove("playing"));
+    audio.src = TRACKS[i].file;
+    audio.play().then(()=>{
+      btn.classList.add("playing");
+      currentTrack = i;
+    }).catch(()=>{ currentTrack = -1; });
   }
-};
+}
+
+// เรียกตอนเปิดอ่าน — เพลงที่เล่นอยู่เล่นต่อเอง (ไม่ต้องทำอะไรเพิ่ม เพราะ audio เล่นต่อข้ามหน้าอยู่แล้ว)
+function maybeStartMusic(){ /* เพลงเล่นต่อเนื่องอยู่แล้ว */ }
 
 /* ── ปุ่มย้อนกลับของมือถือ = ปิดโหมดอ่านก่อน ── */
 window.addEventListener("popstate", ()=>{ if(current>=0) closeReader(); });
